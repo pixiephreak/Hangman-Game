@@ -13,22 +13,45 @@
 var model = {
 	//TO-DO: load random words to array from a remote server or API
 	words:['cat','dog','zebra','goat','bush baby','linx'],
+	updatedCount: 0,
+	increaseCount: function(){
+		this.updatedCount++;
+		return this.updatedCount;
+	}
 
 }
 
 var controller = {
+	init: function(){
+		//grab button div
+		$('#button').click(function(){
+			view.displayScore(model.increaseCount());
+		})
+
+	},
+	updateData: function(data){
+		//updateText
+	},
 	// program randomly selects a word from array
 	pickWord: function(){
 
+	},
+	//when last letter is satisfied, trigger func that draws score in view
+	updateCount: function(){
+		//fire view  and pass value to displaycount();
 	}
 }
 
+//view should exist without data (loading view)
 var view = {
 	init: function(){
+		var count = 0;
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
 			console.log('linked');
 		});
+
+
 	},
 	// As the user guesses the correct letters, reveal them: m a d o _  _ a.
 	displayLetter: function(){
@@ -36,18 +59,33 @@ var view = {
 	},
 	// If the word is madonna, display it like this when the game starts: _ _ _ _ _ _ _.
 	displayWord: function(){
+		// _ _ _ _ _
 
 	},
 	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
 	displayGuessed: function(){
 
-	}
+	},
 	// update score value in DOM
-	displayScore: function(){
+	displayScore: function(count){
+		$('#score').html(count);
 
 	}
-
 }
 
-game.init();
+controller.init();
+view.init();
+
+//render
+
+
+
+$.get('http://www.setgetgo.com/randomword/get.php', {len:5}, (data) => controller.updateData(data));
+
+  //get synonyms and give hints
+
+  //keep track of states
+  //state - word
+  //state - letters tried
+  //
 
