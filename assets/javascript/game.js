@@ -29,11 +29,10 @@ var controller = {
 		})
 
 	},
+	//
 	updateData: function(data){
-		//updateText
-	},
-	// program randomly selects a word from array
-	pickWord: function(){
+		console.log(data);
+		$('#word').html(view.displayBlank(data));
 
 	},
 	//when last letter is satisfied, trigger func that draws score in view
@@ -58,8 +57,12 @@ var view = {
 
 	},
 	// If the word is madonna, display it like this when the game starts: _ _ _ _ _ _ _.
-	displayWord: function(){
-		// _ _ _ _ _
+	displayBlank: function(word){
+		var blanks = [];
+		for(i = 0; i < word.length; i++){
+			blanks.push('_', ' ');
+		}
+		return blanks;
 
 	},
 	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
@@ -80,8 +83,8 @@ view.init();
 
 
 
-$.get('http://www.setgetgo.com/randomword/get.php', {len:5}, (data) => controller.updateData(data));
-
+// $.get('http://www.setgetgo.com/randomword/get.php', {len:5}, (data) => controller.updateData(data));
+$.get('http://www.setgetgo.com/randomword/get.php', (data) => controller.updateData(data));
   //get synonyms and give hints
 
   //keep track of states
