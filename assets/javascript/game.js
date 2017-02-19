@@ -46,6 +46,9 @@ var controller = {
 	//when last letter is satisfied, trigger func that draws score in view
 	updateCount: function(){
 		view.displayScore(model.increaseCount())
+	},
+	searchLetter: function(){
+
 	}
 }
 
@@ -55,16 +58,18 @@ var view = {
 		var count = 0;
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
-			//if key pressed in word9data, find index of letter and replace blank in view
+
 			//update cont by letters replaced
 			//when count === word.length, view.displayVictory()
+			displayLetter()
 		});
 
 
 	},
 	// As the user guesses the correct letters, reveal them: m a d o _  _ a.
 	displayLetter: function(){
-
+		//if key pressed in word data, find index of letter and replace blank in view
+		console.log();
 	},
 	// If the word is madonna, display it like this when the game starts: _ _ _ _ _ _ _.
 	displayBlank: function(word){
