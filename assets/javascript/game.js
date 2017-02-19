@@ -9,6 +9,9 @@
 // Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
 // After the user wins/loses the game should automatically choose another word and make the user play it.
 
+// cape woman: with each correct letter, you come closer to finidng your inner heroine.
+//build woman symbol from array of functions (style.XXXX);
+// correct solution reveals cape
 
 var model = {
 	//TO-DO: load random words to array from a remote server or API
@@ -23,16 +26,21 @@ var model = {
 
 var controller = {
 	init: function(){
-		//grab button div
-		$('#button').click(function(){
-			view.displayScore(model.increaseCount());
-		})
+
 
 	},
-	//
+	//pass random word form api to display function
 	updateData: function(data){
-		console.log(data);
-		$('#word').html(view.displayBlank(data));
+		//how to return the next word each time... closure?
+		function randWord(){
+			for(let i=0; i< data.length; i++){
+				return data[i].word
+		}
+	}
+
+		$('#button').click(function(){
+			$('#word').html(view.displayBlank(randWord()));
+		})
 
 	},
 	//when last letter is satisfied, trigger func that draws score in view
@@ -47,7 +55,9 @@ var view = {
 		var count = 0;
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
-			console.log('linked');
+			//if key pressed in word9data, find index of letter and replace blank in view
+			//update cont by letters replaced
+			//when count === word.length, view.displayVictory()
 		});
 
 
@@ -58,8 +68,10 @@ var view = {
 	},
 	// If the word is madonna, display it like this when the game starts: _ _ _ _ _ _ _.
 	displayBlank: function(word){
+		var thisWord = word;
+		console.log(thisWord);
 		var blanks = [];
-		for(i = 0; i < word.length; i++){
+		for(i = 0; i < thisWord.length; i++){
 			blanks.push('_', ' ');
 		}
 		return blanks;
@@ -84,7 +96,10 @@ view.init();
 
 
 // $.get('http://www.setgetgo.com/randomword/get.php', {len:5}, (data) => controller.updateData(data));
-$.get('http://www.setgetgo.com/randomword/get.php', (data) => controller.updateData(data));
+// $.get('http://www.setgetgo.com/randomword/get.php', (data) => controller.updateData(data));
+
+$.get('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=10&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5' , (data) => controller.updateData(data));
+
   //get synonyms and give hints
 
   //keep track of states
