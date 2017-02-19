@@ -45,7 +45,7 @@ var controller = {
 	},
 	//when last letter is satisfied, trigger func that draws score in view
 	updateCount: function(){
-		//fire view  and pass value to displaycount();
+		view.displayScore(model.increaseCount())
 	}
 }
 
