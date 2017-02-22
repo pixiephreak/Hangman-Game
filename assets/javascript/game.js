@@ -31,56 +31,52 @@ var controller = {
 	},
 	//pass random word form api to display function
 	updateData: function(data){
-		//how to return the next word each time... closure?
+
+		//how to return the next word each time ina longer array?
 		function randWord(){
-			for(let i=0; i< data.length; i++){
-				return data[i].word
+				console.log("randWord: "+data[0].word)
+				return data[0].word;
+				data.shift();
+
+
+	}
+
+		// Use key events to listen for the letters that your players will type.
+		window.addEventListener("keyup", function(event){
+
+			//update cont by letters replaced
+			//when count === word.length, view.displayVictory()
+			$('document').ready(function(){
+				$('#word').html(view.displayLetter(randWord(), event.key));
+
+			})
+		});
+
+	},
+
+		//when last letter is satisfied, trigger func that draws score in view
+		updateCount: function(){
+			view.displayScore(model.increaseCount())
+		},
+		searchLetter: function(){
+
 		}
-	}
-
-		$('#button').click(function(){
-			$('#word').html(view.displayBlank(randWord()));
-		})
-
-	},
-	//when last letter is satisfied, trigger func that draws score in view
-	updateCount: function(){
-		view.displayScore(model.increaseCount())
-	},
-	searchLetter: function(){
-
-	}
 }
 
 //view should exist without data (loading view)
 var view = {
 	init: function(){
 		var count = 0;
-		// Use key events to listen for the letters that your players will type.
-		window.addEventListener("keyup", function(event){
-
-			//update cont by letters replaced
-			//when count === word.length, view.displayVictory()
-			displayLetter()
-		});
-
 
 	},
 	// As the user guesses the correct letters, reveal them: m a d o _  _ a.
-	displayLetter: function(){
+	displayLetter: function(word, letter){
 		//if key pressed in word data, find index of letter and replace blank in view
-		console.log();
-	},
-	// If the word is madonna, display it like this when the game starts: _ _ _ _ _ _ _.
-	displayBlank: function(word){
-		var thisWord = word;
-		console.log(thisWord);
-		var blanks = [];
-		for(i = 0; i < thisWord.length; i++){
-			blanks.push('_', ' ');
-		}
-		return blanks;
+		var display = word.replace(/[A-z]/g, ' _ ');
+		console.log(display);
 
+
+		return display;
 	},
 	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
 	displayGuessed: function(){
@@ -94,7 +90,6 @@ var view = {
 }
 
 controller.init();
-view.init();
 
 //render
 
@@ -103,7 +98,7 @@ view.init();
 // $.get('http://www.setgetgo.com/randomword/get.php', {len:5}, (data) => controller.updateData(data));
 // $.get('http://www.setgetgo.com/randomword/get.php', (data) => controller.updateData(data));
 
-$.get('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=10&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5' , (data) => controller.updateData(data));
+$.get('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=1&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5' , (data) => controller.updateData(data));
 
   //get synonyms and give hints
 
