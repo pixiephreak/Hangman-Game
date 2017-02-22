@@ -28,7 +28,7 @@ var controller = {
 
 	//pass random word form api to display function
 	init: function(data){
-
+		console.log(data);
 		//how to return the next word each time ina longer array?
 		function randWord(){
 				console.log(data[0].word);
@@ -46,6 +46,14 @@ var controller = {
 
 	},
 	updateData: function(){
+
+		window.addEventListener("keyup", function(event){
+        if(event.key = "t"){
+          console.log('something');
+          // you would just add whatever you want to happen here
+        }
+      })
+
 
 	},
 	//when last letter is satisfied, trigger func that draws score in view
@@ -70,6 +78,9 @@ var view = {
 		var display = word.replace(/[A-z]/g, ' _ ');
 		return display;
 
+	},
+	displayCorrect: function(word, letter){
+		console.log(word);
 	},
 	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
 	displayGuessed: function(){
