@@ -33,6 +33,7 @@ var controller = {
 	updateData: function(data){
 
 		clueWord = data[0].word;
+		console.log(clueWord);
 
 		// //how to return the next word each time ina longer array?
 		// function randWord(){
@@ -77,17 +78,14 @@ var view = {
 		return display;
 	},
 	displayLetter: function(word, key){
-
-		function replaceAt(index, character) {
-		    return this.substr(0, index) + character + this.substr(index+character.length);
-		}
+		///figure out how to replace letter at index
 
 		if (word.indexOf(key) != -1){
 			var index = word.indexOf(key);
 			var letter = word[index];
 			console.log(index, letter);
 			currentWord = document.getElementById('word').innerHTML;
-			currentWord.replaceAt(index, letter);;
+			currentWord = currentWord.substr(0, index) + letter + currentWord.substr(index + 1);
 			console.log(currentWord);
 
 		}
