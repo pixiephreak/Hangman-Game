@@ -54,7 +54,7 @@ var controller = {
 		window.addEventListener("keyup", function(event){
 			view.displayLetter(clueWord, event.key)
 			view.displayGuessed(event.key)
-
+			view.removeInstructions();
 		});
 
 	},
@@ -119,6 +119,9 @@ var view = {
 		ctx.moveTo(startx,starty);
 		ctx.lineTo(finishx,finishy);
 		ctx.stroke();
+	},
+	removeInstructions: function(){
+		$('#intro').html("");
 	}
 }
 
