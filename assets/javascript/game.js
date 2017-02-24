@@ -53,6 +53,7 @@ var controller = {
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
 			view.displayLetter(clueWord, event.key)
+			view.displayGuessed(event.key)
 
 		});
 
@@ -80,6 +81,7 @@ var view = {
 			display.push(' _ ')
 		}
 		return display;
+		console.log(display);
 	},
 	displayLetter: function(word, key){
 		///figure out how to replace letter at index
@@ -90,6 +92,7 @@ var view = {
 			//display is not a string
 			display = display.split(/[ ,]+/).filter(Boolean);
 			display[index] = key;
+			// now display pushes as a string
 			$('#word').html(display);
 			console.log(display);
 
@@ -98,7 +101,11 @@ var view = {
 
 		},
 	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
-	displayGuessed: function(){
+	displayGuessed: function(key){
+		var newLetter = `<span>${key},</span>`
+		$('#guessed').append(newLetter);
+	},
+	displayGuessRemaining: function(){
 
 	},
 	// update score value in DOM
