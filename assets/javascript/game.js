@@ -80,13 +80,16 @@ var view = {
 	displayLetter: function(word, key){
 		///figure out how to replace letter at index
 
-		if (word.indexOf(key) != -1){
+		if (word.indexOf(key.toLowerCase()) != -1){
+
 			var index = word.indexOf(key);
 			var letter = word[index];
 			console.log(index, letter);
-			currentWord = document.getElementById('word').innerHTML;
-			currentWord = currentWord.substr(0, index) + letter + currentWord.substr(index + 1);
+			var currentWord = document.getElementById('word').innerHTML;
+			// replace blank at index and replace with letter;
+			var currentWord = currentWord.substr(0, index) + letter + currentWord.substr(index+1);
 			console.log(currentWord);
+			$('#word').html(currentWord);
 
 		}
 
