@@ -32,8 +32,9 @@ var controller = {
 	//pass random word form api to display function
 	updateData: function(data){
 
-		clueWord = data[0].word;
-		console.log(clueWord);
+		var word = data[0].word;
+		var clueWord = word.split('');
+		console.log(`The solution is ${clueWord}`);
 
 		// //how to return the next word each time ina longer array?
 		// function randWord(){
@@ -73,27 +74,29 @@ var view = {
 	},
 	// As the user guesses the correct letters, reveal them: m a d o _  _ a.
 	displayBlank: function(word){
+		var display = [];
 		//if key pressed in word data, find index of letter and replace blank in view
-		var display = word.replace(/[A-z]/g, ' _ ');
+		for(let i=0; i<word.length; i++){
+			display.push(' _ ')
+		}
 		return display;
 	},
 	displayLetter: function(word, key){
 		///figure out how to replace letter at index
 
 		if (word.indexOf(key.toLowerCase()) != -1){
+			var display = $('#word').html();
+			var index = word.indexOf(key.toLowerCase());
+			//display is not a string
+			display = display.split(/[ ,]+/).filter(Boolean);
+			display[index] = key;
+			$('#word').html(display);
+			console.log(display);
 
-			var index = word.indexOf(key);
-			var letter = word[index];
-			console.log(index, letter);
-			var currentWord = document.getElementById('word').innerHTML;
-			// replace blank at index and replace with letter;
-			var currentWord = currentWord.substr(0, index) + letter + currentWord.substr(index+1);
-			console.log(currentWord);
-			$('#word').html(currentWord);
+			}
 
-		}
 
-	},
+		},
 	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
 	displayGuessed: function(){
 
@@ -102,6 +105,13 @@ var view = {
 	displayScore: function(count){
 		$('#score').html(count);
 
+	},
+	displayLine: function(startx,starty,finishx,finishy){
+		var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+		ctx.moveTo(startx,starty);
+		ctx.lineTo(finishx,finishy);
+		ctx.stroke();
 	}
 }
 
