@@ -22,7 +22,7 @@ var model = {
 	guessed: [],
 	display:[],
 	updateScoreCount: 0,
-	updateGuessCount:12,
+	updateGuessCount:15,
 	increaseGuessCount: function(){
 		this.updateGuessCount--;
 		return this.updateScoreCount;
@@ -63,7 +63,7 @@ var controller = {
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
 
-			if(event.which >=65 && event.which <=90 && model.guessed.indexOf(event.key.toLowerCase()) === -1){
+			if(event.which >=65 && event.which <=90 || event.which == 222 || event.which == 189 && model.guessed.indexOf(event.key.toLowerCase()) === -1){
 				view.displayLetter(clueWord, event.key.toLowerCase())
 				view.displayGuessed(event.key.toLowerCase())
 				view.removeInstructions();
@@ -71,6 +71,10 @@ var controller = {
 				view.displayRemainingGuessed(model.updateGuessCount);
 				if(model.updateGuessCount === 0){
 					location.reload();
+				}else if(model.display.indexOf(' _ ') === -1){
+					console.log("won");
+					view.displayScore(model.increaseCount());
+					// location.reload();
 				}
 			}
 		});
@@ -117,7 +121,6 @@ var view = {
 			return indices;
 		}
 		var indexVals = findIndex();
-		console.log(indexVals);
 
 		for (let i=0; i<indexVals.length; i++){
 
@@ -142,7 +145,7 @@ var view = {
 	},
 	// update score value in DOM
 	displayScore: function(count){
-		$('#score').html(count);
+		$('#score').html(`Score: ${count}`);
 
 	},
 	displayLine: function(coordinates){
@@ -175,8 +178,9 @@ $.get('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=fals
   //state - letters tried
   //
 
-  // count remaining guessed
+
   // draw lines to canvas
-  //how to keep score when game reinitiates on page load
+  //how to keep score when game reinitiates on page load (send data to button/keystroke)
+  //fallback when API wont load
 
 
