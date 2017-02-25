@@ -52,9 +52,11 @@ var controller = {
 
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
-			view.displayLetter(clueWord, event.key)
-			view.displayGuessed(event.key)
-			view.removeInstructions();
+			if(event.which >=65 && event.which <=90){
+				view.displayLetter(clueWord, event.key)
+				view.displayGuessed(event.key)
+				view.removeInstructions();
+		}
 		});
 
 	},
@@ -84,6 +86,9 @@ var view = {
 		console.log(display);
 	},
 	displayLetter: function(word, key){
+		//store coordinates for drawing in array
+		var drawing = [];
+
 		///figure out how to replace letter at index
 
 		if (word.indexOf(key.toLowerCase()) != -1){
@@ -142,4 +147,5 @@ $.get('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=fals
   //state - word
   //state - letters tried
   //
+
 
