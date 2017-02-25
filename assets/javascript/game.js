@@ -13,15 +13,23 @@
 //build woman symbol from array of functions (style.XXXX);
 // correct solution reveals cape
 
-var display = [];
+
+
 
 var model = {
 	//TO-DO: load random words to array from a remote server or API
 	words:['cat','dog','zebra','goat','bush baby','linx'],
-	updatedCount: 0,
+	guessed: [],
+	display:[],
+	updateScoreCount: 0,
+	updateGuessCount:12,
+	increaseGuessCount: function(){
+		this.updateGuessCount--;
+		return this.updateScoreCount;
+	},
 	increaseCount: function(){
-		this.updatedCount++;
-		return this.updatedCount;
+		this.updateScoreCount++;
+		return this.updateScoreCount;
 	}
 
 }
@@ -54,11 +62,17 @@ var controller = {
 
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
-			if(event.which >=65 && event.which <=90){
-				view.displayLetter(clueWord, event.key)
-				view.displayGuessed(event.key)
+
+			if(event.which >=65 && event.which <=90 && model.guessed.indexOf(event.key.toLowerCase()) === -1){
+				view.displayLetter(clueWord, event.key.toLowerCase())
+				view.displayGuessed(event.key.toLowerCase())
 				view.removeInstructions();
-		}
+				model.increaseGuessCount();
+				view.displayRemainingGuessed(model.updateGuessCount);
+				if(model.updateGuessCount === 0){
+					location.reload();
+				}
+			}
 		});
 
 	},
@@ -74,7 +88,6 @@ var controller = {
 //view should exist without data (loading view)
 var view = {
 	init: function(){
-		var count = 0;
 
 	},
 	// As the user guesses the correct letters, reveal them: m a d o _  _ a.
@@ -82,10 +95,10 @@ var view = {
 
 		//if key pressed in word data, find index of letter and replace blank in view
 		for(let i=0; i<word.length; i++){
-			display.push(' _ ')
+			model.display.push(' _ ')
 		}
-		return display;
-		console.log(display);
+		return model.display;
+
 	},
 	displayLetter: function(word, key){
 		//store coordinates for drawing in array
@@ -99,7 +112,7 @@ var view = {
 			var indices = [];
 			var str = word;
 			for(var i=0; i<str.length;i++) {
-			    if (str[i] === key) indices.push(i);
+			    if (str[i].toLowerCase() === key){ indices.push(i)};
 			}
 			return indices;
 		}
@@ -108,10 +121,8 @@ var view = {
 
 		for (let i=0; i<indexVals.length; i++){
 
-				display[indexVals[i]] = key;
-				// now display pushes as a string
-				console.log(display);
-				$('#word').html(display);
+				model.display[indexVals[i]] = key;
+				$('#word').html(model.display);
 
 				view.displayLine(drawing[0]);
 				}
@@ -121,10 +132,12 @@ var view = {
 		},
 	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
 	displayGuessed: function(key){
+		model.guessed.push(key);
 		var newLetter = `<span>${key},</span>`
 		$('#guessed').append(newLetter);
 	},
-	displayGuessRemaining: function(){
+	displayRemainingGuessed: function(count){
+		$('#turns').html(`Remaining Guesses: ${count}`);
 
 	},
 	// update score value in DOM
@@ -162,8 +175,8 @@ $.get('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=fals
   //state - letters tried
   //
 
-  //how to use .split() to replace letter in array
-  //how to check for mulitple instances of the same letter
+  // count remaining guessed
+  // draw lines to canvas
   //how to keep score when game reinitiates on page load
 
 
