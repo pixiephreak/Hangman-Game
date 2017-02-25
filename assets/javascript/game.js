@@ -104,11 +104,11 @@ var view = {
 			return indices;
 		}
 		var indexVals = findIndex();
+		console.log(indexVals);
 
-		for (let i=0; i<word.length; i++){
+		for (let i=0; i<indexVals.length; i++){
 
-			if (word.indexOf(key) in findIndex){
-				display[i] = key;
+				display[indexVals[i]] = key;
 				// now display pushes as a string
 				console.log(display);
 				$('#word').html(display);
@@ -116,7 +116,7 @@ var view = {
 				view.displayLine(drawing[0]);
 				}
 
-		}
+
 
 		},
 	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
