@@ -13,6 +13,8 @@
 //build woman symbol from array of functions (style.XXXX);
 // correct solution reveals cape
 
+var display = [];
+
 var model = {
 	//TO-DO: load random words to array from a remote server or API
 	words:['cat','dog','zebra','goat','bush baby','linx'],
@@ -77,7 +79,7 @@ var view = {
 	},
 	// As the user guesses the correct letters, reveal them: m a d o _  _ a.
 	displayBlank: function(word){
-		var display = [];
+
 		//if key pressed in word data, find index of letter and replace blank in view
 		for(let i=0; i<word.length; i++){
 			display.push(' _ ')
@@ -87,22 +89,34 @@ var view = {
 	},
 	displayLetter: function(word, key){
 		//store coordinates for drawing in array
-		var drawing = [];
+		var drawing = [[800/2, 800/8, 800/8, (800-800/8)]];
 
 		///figure out how to replace letter at index
 
-		if (word.indexOf(key.toLowerCase()) != -1){
-			var display = $('#word').html();
-			var index = word.indexOf(key.toLowerCase());
-			//display is not a string
-			display = display.split(/[ ,]+/).filter(Boolean);
-			display[index] = key;
-			// now display pushes as a string
-			$('#word').html(display);
-			console.log(display);
 
+
+		var findIndex= function(){
+			var indices = [];
+			var str = word;
+			for(var i=0; i<str.length;i++) {
+			    if (str[i] === key) indices.push(i);
 			}
+			return indices;
+		}
+		var indexVals = findIndex();
 
+		for (let i=0; i<word.length; i++){
+
+			if (word.indexOf(key) in findIndex){
+				display[i] = key;
+				// now display pushes as a string
+				console.log(display);
+				$('#word').html(display);
+
+				view.displayLine(drawing[0]);
+				}
+
+		}
 
 		},
 	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
@@ -118,11 +132,11 @@ var view = {
 		$('#score').html(count);
 
 	},
-	displayLine: function(startx,starty,finishx,finishy){
+	displayLine: function(coordinates){
 		var c = document.getElementById("myCanvas");
 		var ctx = c.getContext("2d");
-		ctx.moveTo(startx,starty);
-		ctx.lineTo(finishx,finishy);
+		ctx.moveTo(coordinates[0], coordinates[1]);
+		ctx.lineTo(coordinates[2], coordinates[3]);
 		ctx.stroke();
 	},
 	removeInstructions: function(){
@@ -147,5 +161,9 @@ $.get('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=fals
   //state - word
   //state - letters tried
   //
+
+  //how to use .split() to replace letter in array
+  //how to check for mulitple instances of the same letter
+  //how to keep score when game reinitiates on page load
 
 
