@@ -17,7 +17,7 @@
 
 
 var model = {
-	//TO-DO: load random words to array from a remote server or API
+	//words array (backup for random words to array from wordnik API)
 	words:['water buffalo','wild dog','warthog','billy goat','bush baby','linx','secretary bird','antelope'],
 	guessed: [],
 	display:[],
@@ -60,15 +60,6 @@ var controller = {
 		var clueWord = word.split('');
 		console.log(`The solution is ${clueWord}`);
 
-		// //how to return the next word each time ina longer array?
-		// function randWord(){
-		// 		console.log("randWord: "+data[0].word)
-		// 		return data[0].word;
-		// 		data.shift();
-		// }
-
-		//update cont by letters replaced
-			//when count === word.length, view.displayVictory()
 			$('document').ready(function(){
 				$('#word').html(view.displayBlank(clueWord));
 
@@ -98,7 +89,7 @@ var controller = {
 					}else if(model.display.indexOf(' _ ') === -1){
 						console.log("won");
 						view.displayScore(model.increaseCount());
-						// location.reload();
+						location.reload();
 					}
 				}
 
