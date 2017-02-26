@@ -78,10 +78,12 @@ var controller = {
 		window.addEventListener("keyup", function(event){
 
 			if(event.which >=65 && event.which <=90 || event.which == 222 || event.which == 189 || event.which == 32){
-				model.guessed.push(event.key);
-				console.log(model.guessed);
-				console.log(model.guessed.indexOf(event.key === -1));
-				if(model.guessed.indexOf(event.key === -1)){
+
+				if(model.guessed.indexOf(event.key) === -1){
+					console.log(model.guessed.indexOf(event.key));
+					model.guessed.push(event.key);
+					console.log(model.guessed)
+					console.log(model.guessed.indexOf(event.key));
 					view.displayLetter(clueWord, event.key.toLowerCase())
 					view.displayGuessed(event.key.toLowerCase())
 					view.removeInstructions();
