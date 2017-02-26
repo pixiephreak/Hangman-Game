@@ -30,6 +30,14 @@ var model = {
 	increaseCount: function(){
 		this.updateScoreCount++;
 		return this.updateScoreCount;
+	},
+	canvasCoords: {
+		//retrieve canvas dimension
+		width: $( 'canvas' ).attr( "width" ),
+		height: $( 'canvas' ).attr( "height" ),
+
+		//store coordinates for drawing line function in array
+		drawing: [[this.width/2, this.height/6, this.width/8, this.height/2 ], [this.width/2, this.height-(this.height/6), this.width-(this.width/8), this.height/2 ]]
 	}
 
 }
@@ -42,7 +50,8 @@ var controller = {
 	//pass random word form api to display function
 	updateData: function(data){
 
-		var word = data[0].word;
+		// var word = data[0].word; (to use wordnik api)
+		var word = data;
 		var clueWord = word.split('');
 		console.log(`The solution is ${clueWord}`);
 
@@ -63,7 +72,7 @@ var controller = {
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
 
-			if(event.which >=65 && event.which <=90 || event.which == 222 || event.which == 189 && model.guessed.indexOf(event.key.toLowerCase()) === -1){
+			if(event.which >=65 && event.which <=90 || event.which == 222 || event.which == 189 || event.which == 32&& model.guessed.indexOf(event.key.toLowerCase()) === -1){
 				view.displayLetter(clueWord, event.key.toLowerCase())
 				view.displayGuessed(event.key.toLowerCase())
 				view.removeInstructions();
@@ -75,6 +84,10 @@ var controller = {
 					console.log("won");
 					view.displayScore(model.increaseCount());
 					// location.reload();
+				}else{
+					if(clueWord.indexOf(event.key) === -1){
+						view.displayLine(model.canvasCoords.drawing[0]);
+					}
 				}
 			}
 		});
@@ -86,6 +99,10 @@ var controller = {
 	},
 	searchLetter: function(){
 
+	},
+	random: function(length){
+		num = Math.floor((Math.random() * length) + 1);
+		return num;
 	}
 }
 
@@ -105,13 +122,9 @@ var view = {
 
 	},
 	displayLetter: function(word, key){
-		//store coordinates for drawing in array
-		var drawing = [[800/2, 800/8, 800/8, (800-800/8)]];
+
 
 		///figure out how to replace letter at index
-
-
-
 		var findIndex= function(){
 			var indices = [];
 			var str = word;
@@ -127,7 +140,6 @@ var view = {
 				model.display[indexVals[i]] = key;
 				$('#word').html(model.display);
 
-				view.displayLine(drawing[0]);
 				}
 
 
@@ -160,16 +172,22 @@ var view = {
 	}
 }
 
-controller.init();
+controller.updateData(model.words[controller.random(model.words.length)]);
+
+console.log(controller.random(model.words.length))
 
 //render
 
 
 
-// $.get('http://www.setgetgo.com/randomword/get.php', {len:5}, (data) => controller.updateData(data));
-// $.get('http://www.setgetgo.com/randomword/get.php', (data) => controller.updateData(data));
 
-$.get('https://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=1&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5' , (data) => controller.updateData(data));
+// GET request generates random word from API, but no HTTPS support. Runs locally, but does not deploy to Heroku/Pages
+// $.get('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=1&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5' , (data) => controller.updateData(data));
+
+
+
+
+
 
   //get synonyms and give hints
 
@@ -182,5 +200,6 @@ $.get('https://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=fal
   // draw lines to canvas
   //how to keep score when game reinitiates on page load (send data to button/keystroke)
   //fallback when API wont load
+  // turn off heroku https:
 
 
