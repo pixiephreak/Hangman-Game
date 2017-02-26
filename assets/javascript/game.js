@@ -23,6 +23,7 @@ var model = {
 	display:[],
 	updateScoreCount: 0,
 	updateGuessCount:15,
+	updateDrawingCount: 0,
 	increaseGuessCount: function(){
 		this.updateGuessCount--;
 		return this.updateScoreCount;
@@ -31,13 +32,17 @@ var model = {
 		this.updateScoreCount++;
 		return this.updateScoreCount;
 	},
+	increaseDrawingCount: function(){
+		this.updateDrawingCount++;
+		return this.updateDrawingCount;
+	},
 	canvasCoords: {
 		//retrieve canvas dimension
 		width: $( 'canvas' ).attr( "width" ),
 		height: $( 'canvas' ).attr( "height" ),
 
 		//store coordinates for drawing line function in array
-		drawing: [[this.width/2, this.height/6, this.width/8, this.height/2 ], [this.width/2, this.height-(this.height/6), this.width-(this.width/8), this.height/2 ]]
+		drawing: [[350,200,50,400], [350,200,700,400], [700,400,50,400]]
 	}
 
 }
@@ -72,21 +77,27 @@ var controller = {
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
 
-			if(event.which >=65 && event.which <=90 || event.which == 222 || event.which == 189 || event.which == 32&& model.guessed.indexOf(event.key.toLowerCase()) === -1){
-				view.displayLetter(clueWord, event.key.toLowerCase())
-				view.displayGuessed(event.key.toLowerCase())
-				view.removeInstructions();
-				model.increaseGuessCount();
-				view.displayRemainingGuessed(model.updateGuessCount);
-				if(clueWord.indexOf(event.key) === -1){
-					view.displayLine(100,300,300,600);
-				}
-				if(model.updateGuessCount === 0){
-					location.reload();
-				}else if(model.display.indexOf(' _ ') === -1){
-					console.log("won");
-					view.displayScore(model.increaseCount());
-					// location.reload();
+			if(event.which >=65 && event.which <=90 || event.which == 222 || event.which == 189 || event.which == 32){
+				model.guessed.push(event.key);
+				console.log(model.guessed);
+				console.log(model.guessed.indexOf(event.key === -1));
+				if(model.guessed.indexOf(event.key === -1)){
+					view.displayLetter(clueWord, event.key.toLowerCase())
+					view.displayGuessed(event.key.toLowerCase())
+					view.removeInstructions();
+					model.increaseGuessCount();
+					view.displayRemainingGuessed(model.updateGuessCount);
+					if(clueWord.indexOf(event.key) === -1){
+						view.displayLine(model.canvasCoords.drawing[model.updateDrawingCount]);
+						model.increaseDrawingCount();
+					}
+					if(model.updateGuessCount === 0){
+						location.reload();
+					}else if(model.display.indexOf(' _ ') === -1){
+						console.log("won");
+						view.displayScore(model.increaseCount());
+						// location.reload();
+					}
 				}
 
 			}
@@ -147,7 +158,6 @@ var view = {
 		},
 	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
 	displayGuessed: function(key){
-		model.guessed.push(key);
 		var newLetter = `<span>${key},</span>`
 		$('#guessed').append(newLetter);
 	},
@@ -172,9 +182,8 @@ var view = {
 	}
 }
 
-controller.updateData(model.words[controller.random(model.words.length)]);
+controller.updateData(model.words[controller.random(model.words.length-1)]);
 
-console.log(view.displayLine(100,200,400,500))
 
 //render
 
