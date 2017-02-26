@@ -18,11 +18,11 @@
 
 var model = {
 	//TO-DO: load random words to array from a remote server or API
-	words:['cat','dog','zebra','goat','bush baby','linx'],
+	words:['water buffalo','wild dog','warthog','billy goat','bush baby','linx','secretary bird','antelope'],
 	guessed: [],
 	display:[],
 	updateScoreCount: 0,
-	updateGuessCount:15,
+	updateGuessCount:13,
 	updateDrawingCount: 0,
 	increaseGuessCount: function(){
 		this.updateGuessCount--;
@@ -42,7 +42,7 @@ var model = {
 		height: $( 'canvas' ).attr( "height" ),
 
 		//store coordinates for drawing line function in array
-		drawing: [[350,200,50,400], [350,200,700,400], [700,400,50,400]]
+		drawing: [[350,200,50,400], [350,200,700,400], [700,400,50,400],[350,200,350,150],[350,150, 325, 125], [325,125,300,125],[300,125, 275, 150],[275, 150, 275, 175],[300,300, 325, 300], [400,300,425,300], [350,320,360,320],[325,350,375,350]]
 	}
 
 }
@@ -185,7 +185,7 @@ var view = {
 }
 
 controller.updateData(model.words[controller.random(model.words.length-1)]);
-
+console.log(model.canvasCoords.drawing.length);
 
 //render
 
