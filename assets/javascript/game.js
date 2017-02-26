@@ -78,17 +78,17 @@ var controller = {
 				view.removeInstructions();
 				model.increaseGuessCount();
 				view.displayRemainingGuessed(model.updateGuessCount);
+				if(clueWord.indexOf(event.key) === -1){
+					view.displayLine(100,300,300,600);
+				}
 				if(model.updateGuessCount === 0){
 					location.reload();
 				}else if(model.display.indexOf(' _ ') === -1){
 					console.log("won");
 					view.displayScore(model.increaseCount());
 					// location.reload();
-				}else{
-					if(clueWord.indexOf(event.key) === -1){
-						view.displayLine(model.canvasCoords.drawing[0]);
-					}
 				}
+
 			}
 		});
 
@@ -174,7 +174,7 @@ var view = {
 
 controller.updateData(model.words[controller.random(model.words.length)]);
 
-console.log(controller.random(model.words.length))
+console.log(view.displayLine(100,200,400,500))
 
 //render
 
