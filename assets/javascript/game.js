@@ -13,8 +13,7 @@
 //build woman symbol from array of functions (style.XXXX);
 // correct solution reveals cape
 
-
-
+var word;
 
 var model = {
 	//words array (backup for random words to array from wordnik API)
@@ -56,10 +55,11 @@ var model = {
 }
 
 var controller = {
+	//revise retreival and display of clue word on init (repeating same word)
 	init: function(){
 		model.reset();
 		clueWord = model.words[this.random(model.words.length-1)];
-		$('#word').html(view.displayBlank(clueWord));
+		$('#word').html('');
 		$('.guessed-letters').html('');
 		$('#turns').html(`Remaining Guesses: `);
 		view.clearCanvas();
@@ -68,7 +68,7 @@ var controller = {
 	updateData: function(data){
 
 		// var word = data[0].word; (to use wordnik api)
-		var word = data;
+		word = data;
 		//split array into letters and store in an array
 		var clueWord = word.split('');
 		//remove clue word from the words array in model
