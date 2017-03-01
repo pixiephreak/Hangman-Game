@@ -43,22 +43,35 @@ var model = {
 
 		//store coordinates for drawing line function in array
 		drawing: [[350,200,50,400], [350,200,700,400], [700,400,50,400],[350,200,350,150],[350,150, 325, 125], [325,125,300,125],[300,125, 275, 150],[275, 150, 275, 175],[300,300, 325, 300], [400,300,425,300], [350,320,360,320],[325,350,375,350]]
+	},
+	reset: function(){
+		//reset coutns to initial values
+		this.guessed = [];
+		this.display = [];
+		this.updateScoreCount = 0;
+		this.updateGuessCount = 13;
+		this.updateDrawingCount = 0;
 	}
 
 }
 
 var controller = {
 	init: function(){
-
-
+		model.reset();
+		clueWord = model.words[this.random(model.words.length-1)];
+		$('#word').html(view.displayBlank(clueWord));
+		$('.guessed-letters').html('');
+		$('#turns').html(`Remaining Guesses: `);
 	},
-	//pass random word form api to display function
+	//pass random word from api to display function
 	updateData: function(data){
 
 		// var word = data[0].word; (to use wordnik api)
 		var word = data;
+		//split array into letters and store in an array
 		var clueWord = word.split('');
-		console.log(`The solution is ${clueWord}`);
+		//remove clue word from the words array in model
+		model.words.splice(model.words.indexOf(word), 1);
 
 			$('document').ready(function(){
 				$('#word').html(view.displayBlank(clueWord));
@@ -71,10 +84,7 @@ var controller = {
 			if(event.which >=65 && event.which <=90 || event.which == 222 || event.which == 189 || event.which == 32){
 
 				if(model.guessed.indexOf(event.key) === -1){
-					console.log(model.guessed.indexOf(event.key));
 					model.guessed.push(event.key);
-					console.log(model.guessed)
-					console.log(model.guessed.indexOf(event.key));
 					view.displayLetter(clueWord, event.key.toLowerCase())
 					view.displayGuessed(event.key.toLowerCase())
 					view.removeInstructions();
@@ -84,12 +94,12 @@ var controller = {
 						view.displayLine(model.canvasCoords.drawing[model.updateDrawingCount]);
 						model.increaseDrawingCount();
 					}
-					if(model.updateGuessCount === 0){
-						location.reload();
+					if(model.updateGuessCount <= 0){
+						controller.init();
 					}else if(model.display.indexOf(' _ ') === -1){
 						console.log("won");
 						view.displayScore(model.increaseCount());
-						location.reload();
+						controller.init();
 					}
 				}
 
@@ -151,7 +161,7 @@ var view = {
 		},
 	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
 	displayGuessed: function(key){
-		var newLetter = `<span>${key},</span>`
+		var newLetter = `<span class='guessed-letters'>${key},</span>`
 		$('#guessed').append(newLetter);
 	},
 	displayRemainingGuessed: function(count){
@@ -176,9 +186,6 @@ var view = {
 }
 
 controller.updateData(model.words[controller.random(model.words.length-1)]);
-console.log(model.canvasCoords.drawing.length);
-
-//render
 
 
 
@@ -186,21 +193,8 @@ console.log(model.canvasCoords.drawing.length);
 // GET request generates random word from API, but no HTTPS support. Runs locally, but does not deploy to Heroku/Pages
 // $.get('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=1&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5' , (data) => controller.updateData(data));
 
-
-
-
-
-
   //get synonyms and give hints
 
-  //keep track of states
-  //state - word
-  //state - letters tried
-  //
-
-
-  // draw lines to canvas
-  //how to keep score when game reinitiates on page load (send data to button/keystroke)
   //fallback when API wont load
   // turn off heroku https:
 
