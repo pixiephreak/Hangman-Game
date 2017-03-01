@@ -62,6 +62,7 @@ var controller = {
 		$('#word').html(view.displayBlank(clueWord));
 		$('.guessed-letters').html('');
 		$('#turns').html(`Remaining Guesses: `);
+		view.clearCanvas();
 	},
 	//pass random word from api to display function
 	updateData: function(data){
@@ -179,6 +180,15 @@ var view = {
 		ctx.moveTo(coordinates[0], coordinates[1]);
 		ctx.lineTo(coordinates[2], coordinates[3]);
 		ctx.stroke();
+	},
+	clearCanvas: function(){
+		var c = document.getElementById("myCanvas");
+		var ctx = c.getContext("2d");
+		//retrieve canvas dimension
+		var width = $( 'canvas' ).attr( "width" );
+		var height = $( 'canvas' ).attr( "height" );
+
+		ctx.clearRect(0, 0, width, height);
 	},
 	removeInstructions: function(){
 		$('#intro').html("");
