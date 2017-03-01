@@ -89,10 +89,6 @@ var controller = {
 		$('#word').html(view.displayBlank(clueWord));
 		console.log(`The solution is ${word}`);
 
-	},
-	//pass random word from api to display function
-	updateData: function(){
-
 		$('document').ready(function(){
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
@@ -111,12 +107,12 @@ var controller = {
 						model.increaseDrawingCount();
 					}
 					if(model.updateGuessCount <= 0){
-						controller.init();
+						controller.init(model.words[controller.random(model.words.length-1)]);
 					}else if(model.display.indexOf(' _ ') === -1){
 						console.log("won");
 						model.increaseCount();
-						view.displayScore(updateScoreCount);
-						controller.init();
+						view.displayScore(model.updateScoreCount);
+						controller.init(model.words[controller.random(model.words.length-1)]);
 					}
 				}
 
