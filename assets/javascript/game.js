@@ -14,6 +14,7 @@
 // correct solution reveals cape
 
 var word;
+var clueWord;
 
 var model = {
 	//words array (backup for random words to array from wordnik API)
@@ -56,28 +57,27 @@ var model = {
 
 var controller = {
 	//revise retreival and display of clue word on init (repeating same word)
-	init: function(){
-		model.reset();
-		clueWord = model.words[this.random(model.words.length-1)];
-		$('#word').html('');
-		$('.guessed-letters').html('');
-		$('#turns').html(`Remaining Guesses: `);
-		view.clearCanvas();
-	},
-	//pass random word from api to display function
-	updateData: function(data){
+	init: function(data){
 
+		$('document').ready(function(){
 		// var word = data[0].word; (to use wordnik api)
 		word = data;
 		//split array into letters and store in an array
 		var clueWord = word.split('');
 		//remove clue word from the words array in model
 		model.words.splice(model.words.indexOf(word), 1);
-
-			$('document').ready(function(){
-				$('#word').html(view.displayBlank(clueWord));
-
+		model.reset();
+		$('#word').html('');
+		$('.guessed-letters').html('');
+		$('#turns').html(`Remaining Guesses: `);
+		view.clearCanvas();
+		$('#word').html(view.displayBlank(clueWord));
+		console.log(`The solution is ${word}`);
 			})
+	},
+	//pass random word from api to display function
+	updateData: function(data){
+
 
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
@@ -99,7 +99,8 @@ var controller = {
 						controller.init();
 					}else if(model.display.indexOf(' _ ') === -1){
 						console.log("won");
-						view.displayScore(model.increaseCount());
+						model.increaseCount();
+						view.displayScore(updateScoreCount);
 						controller.init();
 					}
 				}
@@ -195,16 +196,16 @@ var view = {
 	}
 }
 
-controller.updateData(model.words[controller.random(model.words.length-1)]);
+controller.init(model.words[controller.random(model.words.length-1)]);
 
 
 
 
-// GET request generates random word from API, but no HTTPS support. Runs locally, but does not deploy to Heroku/Pages
+// GET request generates random word from API, but no HTTPS support. Runs locally, but does not deploy to Heroku/Pages due to SSL
 // $.get('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=1&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5' , (data) => controller.updateData(data));
 
+  // TO-DO:
   //get synonyms and give hints
-
   //fallback when API wont load
   // turn off heroku https:
 
