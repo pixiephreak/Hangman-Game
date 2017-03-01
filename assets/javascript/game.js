@@ -19,23 +19,32 @@ var clueWord;
 var model = {
 	//words array (backup for random words to array from wordnik API)
 	words:['water buffalo','wild dog','warthog','billy goat','bush baby','linx','secretary bird','antelope'],
+	//store letters which have already been guessed.
 	guessed: [],
+	//store an array of '_' the length of clue word
 	display:[],
+	//store user's score
 	updateScoreCount: 0,
-	updateGuessCount:13,
+	//store number of guesses the user has left.
+	updateGuessCount: 0 ,
+	//store index for retrieving canvasCoords
 	updateDrawingCount: 0,
-	increaseGuessCount: function(){
+	//decrease number of guesses available to user before reset
+	decreaseGuessCount: function(){
 		this.updateGuessCount--;
 		return this.updateScoreCount;
 	},
+	//increase score count by one
 	increaseCount: function(){
 		this.updateScoreCount++;
 		return this.updateScoreCount;
 	},
+	//increase count used to retreive line coords
 	increaseDrawingCount: function(){
 		this.updateDrawingCount++;
 		return this.updateDrawingCount;
 	},
+	//store parameters called to populate displayLine
 	canvasCoords: {
 		//retrieve canvas dimension
 		width: $( 'canvas' ).attr( "width" ),
@@ -45,40 +54,46 @@ var model = {
 		drawing: [[350,200,50,400], [350,200,700,400], [700,400,50,400],[350,200,350,150],[350,150, 325, 125], [325,125,300,125],[300,125, 275, 150],[275, 150, 275, 175],[300,300, 325, 300], [400,300,425,300], [350,320,360,320],[325,350,375,350]]
 	},
 	reset: function(){
-		//reset coutns to initial values
+		//reset counts to initial values
 		this.guessed = [];
 		this.display = [];
 		this.updateScoreCount = 0;
-		this.updateGuessCount = 13;
+		this.updateGuessCount = word.length+5;
 		this.updateDrawingCount = 0;
 	}
 
 }
 
 var controller = {
-	//revise retreival and display of clue word on init (repeating same word)
+	//TO-DO: revise retrieval and display of clue word on init (repeating same word)
 	init: function(data){
 
-		$('document').ready(function(){
+
 		// var word = data[0].word; (to use wordnik api)
 		word = data;
 		//split array into letters and store in an array
 		var clueWord = word.split('');
 		//remove clue word from the words array in model
 		model.words.splice(model.words.indexOf(word), 1);
+		//reset model to initial vals
 		model.reset();
+		//empty word div in DOM
 		$('#word').html('');
+		//empty guessed-letters spansin DOM
 		$('.guessed-letters').html('');
+		//empty remaining guesses count val in DOM
 		$('#turns').html(`Remaining Guesses: `);
+		//clear the canvas of previousley drawn lines
 		view.clearCanvas();
+		// fill #word elem with num of '_' equal to clueword.length
 		$('#word').html(view.displayBlank(clueWord));
 		console.log(`The solution is ${word}`);
-			})
+
 	},
 	//pass random word from api to display function
-	updateData: function(data){
+	updateData: function(){
 
-
+		$('document').ready(function(){
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
 
@@ -89,7 +104,7 @@ var controller = {
 					view.displayLetter(clueWord, event.key.toLowerCase())
 					view.displayGuessed(event.key.toLowerCase())
 					view.removeInstructions();
-					model.increaseGuessCount();
+					model.decreaseGuessCount();
 					view.displayRemainingGuessed(model.updateGuessCount);
 					if(clueWord.indexOf(event.key) === -1){
 						view.displayLine(model.canvasCoords.drawing[model.updateDrawingCount]);
@@ -107,6 +122,7 @@ var controller = {
 
 			}
 		});
+	});
 
 	},
 	//when last letter is satisfied, trigger func that draws score in view
@@ -200,7 +216,7 @@ controller.init(model.words[controller.random(model.words.length-1)]);
 
 
 
-
+// removed wordnik get request due to mixed content error.
 // GET request generates random word from API, but no HTTPS support. Runs locally, but does not deploy to Heroku/Pages due to SSL
 // $.get('http://api.wordnik.com:80/v4/words.json/randomWords?hasDictionaryDef=false&minCorpusCount=0&maxCorpusCount=-1&minDictionaryCount=1&maxDictionaryCount=-1&minLength=5&maxLength=-1&limit=1&api_key=a2a73e7b926c924fad7001ca3111acd55af2ffabf50eb4ae5' , (data) => controller.updateData(data));
 
