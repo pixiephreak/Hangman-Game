@@ -69,17 +69,18 @@ var controller = {
 	init: function(data){
 
 
-		// var word = data[0].word; (to use wordnik api)
+		// var word = data[0].word; (to use wordnik api) TO-DO: write if statment here
 		word = data;
 		//split array into letters and store in an array
 		var clueWord = word.split('');
+		console.log(clueWord);
 		//remove clue word from the words array in model
 		model.words.splice(model.words.indexOf(word), 1);
 		//reset model to initial vals
 		model.reset();
 		//empty word div in DOM
 		$('#word').html('');
-		//empty guessed-letters spansin DOM
+		//empty guessed-letters spans in DOM
 		$('.guessed-letters').html('');
 		//empty remaining guesses count val in DOM
 		$('#turns').html(`Remaining Guesses: `);
@@ -89,7 +90,7 @@ var controller = {
 		$('#word').html(view.displayBlank(clueWord));
 		console.log(`The solution is ${word}`);
 
-		$('document').ready(function(){
+
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
 
@@ -97,6 +98,7 @@ var controller = {
 
 				if(model.guessed.indexOf(event.key) === -1){
 					model.guessed.push(event.key);
+					//why doesn't this update?!?! (logging only initial clueWord)
 					view.displayLetter(clueWord, event.key.toLowerCase())
 					view.displayGuessed(event.key.toLowerCase())
 					view.removeInstructions();
@@ -118,7 +120,7 @@ var controller = {
 
 			}
 		});
-	});
+
 
 	},
 	//when last letter is satisfied, trigger func that draws score in view
@@ -156,6 +158,7 @@ var view = {
 		var findIndex= function(){
 			var indices = [];
 			var str = word;
+			//Logging only to initial word
 			for(var i=0; i<str.length;i++) {
 			    if (str[i].toLowerCase() === key){ indices.push(i)};
 			}
