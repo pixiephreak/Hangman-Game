@@ -60,6 +60,8 @@ var model = {
 		this.display = [];
 		this.updateGuessCount = word.length+5;
 		this.updateDrawingCount = 0;
+		//clear the canvas of previousley drawn lines
+		view.clearCanvas();
 	}
 
 }
@@ -84,8 +86,6 @@ var controller = {
 		$('.guessed-letters').html('');
 		//empty remaining guesses count val in DOM
 		$('#turns').html(`Remaining Guesses: `);
-		//clear the canvas of previousley drawn lines
-		view.clearCanvas();
 		// fill #word elem with num of '_' equal to clueword.length
 		$('#word').html(view.displayBlank(clueWord));
 		console.log(`The solution is ${word}`);
@@ -95,7 +95,8 @@ var controller = {
 		window.addEventListener("keyup", function(event){
 			//check if keys are letters, space, or apostrophe
 			if(event.which >=65 && event.which <=90 || event.which == 222 || event.which == 189 || event.which == 32){
-				// TO-DO: prevent default
+				// prevent default behavior of key (TO:DO- broken)
+				event.preventDefault();
 				//check if the letter has been pressed or not
 				if(model.guessed.indexOf(event.key) === -1){
 					//if it's a new letter, store it in an array of pressed letters
@@ -151,7 +152,7 @@ var view = {
 	init: function(){
 
 	},
-	// create a blank for each letter in word and store in an array
+	// create a blank for each letter in word and store it in an array
 	displayBlank: function(word){
 
 
@@ -187,11 +188,12 @@ var view = {
 
 
 		},
-	// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
+	// Display letters the user has guessed in the DOM.
 	displayGuessed: function(key){
 		var newLetter = `<span class='guessed-letters'>${key},</span>`
 		$('#guessed').append(newLetter);
 	},
+	//display count for remaining guesse in DOM
 	displayRemainingGuessed: function(count){
 		$('#turns').html(`Remaining Guesses: ${count}`);
 
@@ -201,6 +203,7 @@ var view = {
 		$('#score').html(`Score: ${count}`);
 
 	},
+	//draw a line to the canvas for each wrong guess
 	displayLine: function(coordinates){
 		var c = document.getElementById("myCanvas");
 		var ctx = c.getContext("2d");
@@ -208,6 +211,7 @@ var view = {
 		ctx.lineTo(coordinates[2], coordinates[3]);
 		ctx.stroke();
 	},
+	//clear the canvas of lines on win/lose
 	clearCanvas: function(){
 		var c = document.getElementById("myCanvas");
 		var ctx = c.getContext("2d");
@@ -217,6 +221,7 @@ var view = {
 
 		ctx.clearRect(0, 0, width, height);
 	},
+	//remove instructions from display
 	removeInstructions: function(){
 		$('#intro').html("");
 	}
