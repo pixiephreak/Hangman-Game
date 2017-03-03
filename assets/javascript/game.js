@@ -56,6 +56,7 @@ var model = {
 	reset: function(){
 		//reset counts to initial values
 		this.guessed = [];
+		console.log(this.guessed);
 		this.display = [];
 		this.updateScoreCount = 0;
 		this.updateGuessCount = word.length+5;
@@ -72,7 +73,7 @@ var controller = {
 		// var word = data[0].word; (to use wordnik api) TO-DO: write if statment here
 		word = data;
 		//split array into letters and store in an array
-		var clueWord = word.split('');
+		clueWord = word.split('');
 		console.log(clueWord);
 		//remove clue word from the words array in model
 		model.words.splice(model.words.indexOf(word), 1);
@@ -93,27 +94,43 @@ var controller = {
 
 		// Use key events to listen for the letters that your players will type.
 		window.addEventListener("keyup", function(event){
-
+			//check if keys are letters, space, or apostrophe
 			if(event.which >=65 && event.which <=90 || event.which == 222 || event.which == 189 || event.which == 32){
-
+				// TO-DO: prevent default
+				//check if the letter has been pressed or not
 				if(model.guessed.indexOf(event.key) === -1){
+					//if it's a new letter, store it in an array of pressed letters
 					model.guessed.push(event.key);
-					//why doesn't this update?!?! (logging only initial clueWord)
+					//check for the letter in the clueword and replace it if present
+					//TO-DO: why doesn't this update?!?! (logging only initial clueWord)
 					view.displayLetter(clueWord, event.key.toLowerCase())
+					//show the already guessed letter in the #guessed div
 					view.displayGuessed(event.key.toLowerCase())
+					//remove initial instrucitons from screen
 					view.removeInstructions();
+					//descrease the number of guesses left to player
 					model.decreaseGuessCount();
+					//show num of guesses left in #turns div
 					view.displayRemainingGuessed(model.updateGuessCount);
-					if(clueWord.indexOf(event.key) === -1){
+					//if the letter pressed isn't in the clueWord array
+					if(clueWord.indexOf(event.key.toLowerCase()) === -1){
+						//draw a line of the hange rimage to the canvas
 						view.displayLine(model.canvasCoords.drawing[model.updateDrawingCount]);
+						//increase drawing count by one in order to select the next array of coords
 						model.increaseDrawingCount();
 					}
+					//check if the player has run out of guesses
 					if(model.updateGuessCount <= 0){
+						//reset game state with new word and initial values
 						controller.init(model.words[controller.random(model.words.length-1)]);
+					//check if word has been completed
 					}else if(model.display.indexOf(' _ ') === -1){
 						console.log("won");
+						//increase the user's score in model
 						model.increaseCount();
+						//display the updated score in DOM
 						view.displayScore(model.updateScoreCount);
+						//reset game state with new word and initial values
 						controller.init(model.words[controller.random(model.words.length-1)]);
 					}
 				}
@@ -123,13 +140,7 @@ var controller = {
 
 
 	},
-	//when last letter is satisfied, trigger func that draws score in view
-	updateCount: function(){
-		view.displayScore(model.increaseCount())
-	},
-	searchLetter: function(){
-
-	},
+	//return a random letter between 0 and given param
 	random: function(length){
 		num = Math.floor((Math.random() * length) + 1);
 		return num;
@@ -141,20 +152,21 @@ var view = {
 	init: function(){
 
 	},
-	// As the user guesses the correct letters, reveal them: m a d o _  _ a.
+	// create a blank for each letter in word and store in an array
 	displayBlank: function(word){
 
-		//if key pressed in word data, find index of letter and replace blank in view
+
 		for(let i=0; i<word.length; i++){
 			model.display.push(' _ ')
 		}
 		return model.display;
 
 	},
+	//if key pressed in word, find index of letter and replace blank in view with letter
 	displayLetter: function(word, key){
 
 
-		///figure out how to replace letter at index
+
 		var findIndex= function(){
 			var indices = [];
 			var str = word;
