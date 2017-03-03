@@ -58,7 +58,6 @@ var model = {
 		this.guessed = [];
 		console.log(this.guessed);
 		this.display = [];
-		this.updateScoreCount = 0;
 		this.updateGuessCount = word.length+5;
 		this.updateDrawingCount = 0;
 	}
