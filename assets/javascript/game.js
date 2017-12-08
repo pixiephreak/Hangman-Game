@@ -1,17 +1,3 @@
-// Choose a theme for your game! In the demo, we picked an 80s theme: 80s questions, 80s sound and an 80s aesthetic. You can choose any subject for your theme, though, so be creative!
-// Use key events to listen for the letters that your players will type.
-// Display the following on the page:
-// Press any key to get started!
-// Wins: (# of times user guessed the word correctly).
-// If the word is madonna, display it like this when the game starts: _ _ _ _ _ _ _.
-// As the user guesses the correct letters, reveal them: m a d o _  _ a.
-// Number of Guesses Remaining: (# of guesses remaining for the user).
-// Letters Already Guessed: (Letters the user has guessed, displayed like L Z Y H).
-// After the user wins/loses the game should automatically choose another word and make the user play it.
-
-// cape woman: with each correct letter, you come closer to finidng your inner heroine.
-//build woman symbol from array of functions (style.XXXX);
-// correct solution reveals cape
 
 var word;
 var clueWord;
@@ -69,8 +55,6 @@ var model = {
 var controller = {
 	//TO-DO: revise retrieval and display of clue word on init (repeating same word)
 	init: function(data){
-
-
 		// var word = data[0].word; (to use wordnik api) TO-DO: write if statment here
 		word = data;
 		//split array into letters and store in an array
@@ -165,8 +149,6 @@ var view = {
 	//if key pressed in word, find index of letter and replace blank in view with letter
 	displayLetter: function(word, key){
 
-
-
 		var findIndex= function(){
 			var indices = [];
 			var str = word;
@@ -184,9 +166,7 @@ var view = {
 				$('#word').html(model.display);
 
 				}
-
-
-
+		
 		},
 	// Display letters the user has guessed in the DOM.
 	displayGuessed: function(key){
@@ -237,7 +217,6 @@ controller.init(model.words[controller.random(model.words.length-1)]);
 
   // TO-DO:
   //get synonyms and give hints
-  //fallback when API wont load
   // turn off heroku https:
 
 
